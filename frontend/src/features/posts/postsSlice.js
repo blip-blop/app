@@ -7,16 +7,17 @@ const initialState = {
   jobDate: "",
 };
 
-export const postJob = createAsyncThunk(
-  "api/jobs/addjob",
+export const postOffer = createAsyncThunk(
+  "/addjob",
   async (jobData, thunkAPI) => {
-    console.log(jobData);
     try {
+      console.log(jobData);
       axios
         .post("http://localhost:5000/api/jobs/addjob", {
+          employerId: jobData.employerId,
           jobTitle: jobData.jobTitle,
-          jobLocation: jobData.jobLocation,
           jobDescription: jobData.jobDescription,
+          jobLocation: jobData.jobLocation,
           jobDate: jobData.jobDate,
         })
         .then(function(response) {
@@ -25,9 +26,12 @@ export const postJob = createAsyncThunk(
         .catch(function(error) {
           console.log(error);
         });
-    } catch (e) {
-      console.log("Error", e.response.data);
-      thunkAPI.rejectWithValue(e.response.data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(thunkAPI.rejectWithValue(message));
     }
   }
 );
@@ -39,6 +43,22 @@ export const postSlice = createSlice({
     post: (state, action) => {
       state.value = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(postOffer.pending, (state) => {
+        state.isFetching = true;
+      })
+      .addCase(postOffer.fulfilled, (state, action) => {
+        state.isFetching = false;
+        state.isSuccess = true;
+        state.data = action.payload;
+      })
+      .addCase(postOffer.rejected, (state, action) => {
+        state.isFetching = false;
+        state.isError = true;
+        state.message = action.payload;
+      });
   },
 });
 

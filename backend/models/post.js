@@ -17,6 +17,10 @@ const postSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  employerId: {
+    type: String,
+    required: false,
+  },
 });
 
 const Post = mongoose.model("Post", postSchema);

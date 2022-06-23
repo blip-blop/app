@@ -1,7 +1,8 @@
 import React from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   signupUser,
   userSelector,
@@ -9,10 +10,9 @@ import {
 } from "../features/users/userSlice";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isFetching, isSuccess, isError, errorMessage } = useSelector(
-    userSelector
-  );
+  const { isSuccess } = useSelector(userSelector);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -53,14 +53,10 @@ const RegisterForm = () => {
       [e.target.name]: value,
     });
   };
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(clearState());
-    }
-    if (isError) {
-      dispatch(clearState());
-    }
-  }, [isSuccess, isError]);
+  if (isSuccess) {
+    navigate("/login");
+    dispatch(clearState());
+  }
 
   return (
     <div className="register-form ">

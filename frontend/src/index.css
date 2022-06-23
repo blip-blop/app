@@ -40,6 +40,15 @@ code {
   font-weight: bolder;
 }
 
+.nav-buttons-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav-buttons {
+  justify-self: flex-end;
+}
+
 .logo {
   border-radius: 50%;
   display: inline-block;

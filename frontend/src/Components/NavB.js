@@ -1,11 +1,32 @@
 import React from "react";
-import { Navbar, Container, NavDropdown, Nav } from "react-bootstrap";
+import { Navbar, Container, NavDropdown, Nav, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import logo from "../images/logo.jpg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { clearState, logout } from "../features/users/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const NavB = () => {
-  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.data);
+  const onLogout = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    dispatch(clearState());
+    navigate("/");
+  };
+
+  const onLogin = (e) => {
+    e.preventDefault();
+    navigate("/login");
+  };
+
+  const onSignup = (e) => {
+    e.preventDefault();
+    navigate("/register");
+  };
+
   return (
     <div className="nav-bar">
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -25,11 +46,10 @@ const NavB = () => {
               <LinkContainer to="/post-jobs">
                 <Nav.Link>Post Jobs</Nav.Link>
               </LinkContainer>
+              <Button onClick={onLogin}>Sign In</Button>
+              <Button onClick={onSignup}>Sign Up</Button>
             </Nav>
-
-            <NavDropdown
-              title={`${user.firstName} ${user.lastName}`.toUpperCase()}
-              id="collasible-nav-dropdown">
+            <NavDropdown title="" id="collasible-nav-dropdown">
               <LinkContainer to="/profile">
                 <NavDropdown.Item>Profile</NavDropdown.Item>
               </LinkContainer>
@@ -38,7 +58,7 @@ const NavB = () => {
               </LinkContainer>
               <NavDropdown.Divider />
               <LinkContainer to="/">
-                <NavDropdown.Item>Logout</NavDropdown.Item>
+                <Button onClick={onLogout}>Logout</Button>
               </LinkContainer>
             </NavDropdown>
           </Navbar.Collapse>

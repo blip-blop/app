@@ -7,29 +7,28 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const LoginForm = () => {
-  const { user, isSuccess } = useSelector((state) => state.user);
+  const { isSuccess } = useSelector((state) => state.user);
   const [data, setData] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmit = (e) => {
-    console.log(data);
     e.preventDefault();
     dispatch(loginUser(data));
-    if (isSuccess || user) {
-      navigate("/");
-    }
     dispatch(clearState());
     console.log("dispatched", data);
   };
 
+  if (isSuccess) {
+    navigate("/");
+    dispatch(clearState());
+  }
   const handleChange = (e) => {
     const value = e.target.value;
     setData({
       ...data,
       [e.target.name]: value,
     });
-    console.log(data);
   };
 
   return (

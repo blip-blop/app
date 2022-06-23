@@ -2,8 +2,7 @@ import React from "react";
 import { Button, Form, Col, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { post } from "../State/reducers/postReducers";
-import { postJob } from "../features/posts/postsSlice";
+import { postOffer } from "../features/posts/postsSlice";
 
 const JobPostForm = () => {
   const dispatch = useDispatch();
@@ -115,7 +114,7 @@ const JobPostForm = () => {
                   jobDescription: data.jobDescription,
                   jobDate: dateTime,
                 };
-                dispatch(postJob(dataa));
+                dispatch(postOffer(dataa));
               }}>
               Post Job Offer
             </Button>
